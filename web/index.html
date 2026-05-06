@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fitness AI</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="app">
+    <!-- Login -->
+    <div id="login-screen" class="screen active">
+      <div class="login-box">
+        <div class="logo">Fitness AI</div>
+        <h2>Treinador Pessoal Inteligente</h2>
+
+        <!-- Login Form -->
+        <div id="login-form">
+          <input type="text" id="email" placeholder="Email ou Nome" value="test@fitness.ai">
+          <input type="password" id="password" placeholder="Password" value="password123">
+          <button onclick="login()">Entrar</button>
+          <p class="switch-form">Não tens conta? <a href="#" onclick="showRegister()">Criar conta</a></p>
+        </div>
+
+        <!-- Register Form -->
+        <div id="register-form" style="display:none;">
+          <input type="text" id="reg-name" placeholder="Nome *">
+          <input type="email" id="reg-email" placeholder="Email *">
+          <input type="password" id="reg-password" placeholder="Password *">
+          <input type="number" id="reg-age" placeholder="Idade">
+          <input type="number" id="reg-weight" placeholder="Peso (kg)">
+          <input type="number" id="reg-height" placeholder="Altura (cm)">
+          <select id="reg-goal">
+            <option value="general">Geral</option>
+            <option value="strength">Força</option>
+            <option value="muscle">Massa Muscular</option>
+            <option value="weight_loss">Perda de Peso</option>
+            <option value="endurance">Resistência</option>
+          </select>
+          <button onclick="register()">Criar Conta</button>
+          <p class="switch-form">Já tens conta? <a href="#" onclick="showLogin()">Entrar</a></p>
+        </div>
+
+        <div id="login-error" class="error"></div>
+      </div>
+    </div>
+
+    <!-- Main app with tabs -->
+    <div id="dashboard-screen" class="screen">
+      <header>
+        <h1>Fitness AI</h1>
+        <button onclick="logout()">Sair</button>
+      </header>
+
+      <!-- Page: Home -->
+      <div id="page-home" class="page active">
+        <div class="user-greeting">
+          <h2 id="user-name">Ola!</h2>
+          <p>Pronto para treinar hoje?</p>
+        </div>
+        <div class="card suggestion-card" id="today-workout-card">
+          <div class="card-header">
+            <span class="icon">📅</span>
+            <div>
+              <h3>Treino de Hoje</h3>
+              <p id="today-workout-name">A carregar...</p>
+            </div>
+          </div>
+          <p id="today-workout-info"></p>
+          <div id="today-workout-actions" class="today-workout-actions"></div>
+        </div>
+        <div class="card">
+          <h3>Dados do Smartwatch (Simulado)</h3>
+          <div class="stats-grid">
+            <div class="stat"><span class="stat-value" id="heart-rate">--</span><span class="stat-label">BPM</span></div>
+            <div class="stat"><span class="stat-value" id="calories">--</span><span class="stat-label">Kcal</span></div>
+            <div class="stat"><span class="stat-value" id="steps">--</span><span class="stat-label">Passos</span></div>
+            <div class="stat"><span class="stat-value" id="active">--</span><span class="stat-label">Min Ativos</span></div>
+          </div>
+        </div>
+        <div class="card watch-connect-card">
+          <h3>Apple Watch</h3>
+          <div id="watch-status" class="watch-status">
+            <div class="watch-icon-container">
+              <span class="watch-icon-big">⌚</span>
+            </div>
+            <p class="watch-status-text" id="watch-status-text">Desconectado</p>
+            <button class="primary-btn" id="watch-connect-btn" onclick="connectAppleWatch()">Conectar Apple Watch</button>
+          </div>
+          <div id="watch-connected" class="watch-connected" style="display:none;">
+            <div class="watch-header">
+              <span class="watch-icon-big">⌚</span>
+              <div>
+                <p class="watch-name">Apple Watch Series 9</p>
+                <p class="watch-sync">Sincronizado agora</p>
+              </div>
+              <button class="btn-disconnect" onclick="disconnectWatch()">Desconectar</button>
+            </div>
+            <div class="watch-data-grid">
+              <div class="watch-data-item">
+                <span class="watch-data-icon">❤️</span>
+                <span class="watch-data-value" id="watch-hr">72</span>
+                <span class="watch-data-label">BPM</span>
+              </div>
+              <div class="watch-data-item">
+                <span class="watch-data-icon">🔥</span>
+                <span class="watch-data-value" id="watch-cal">350</span>
+                <span class="watch-data-label">Kcal</span>
+              </div>
+              <div class="watch-data-item">
+                <span class="watch-data-icon">👟</span>
+                <span class="watch-data-value" id="watch-steps">6500</span>
+                <span class="watch-data-label">Passos</span>
+              </div>
+              <div class="watch-data-item">
+                <span class="watch-data-icon">🏃</span>
+                <span class="watch-data-value" id="watch-active">45</span>
+                <span class="watch-data-label">Min Ativos</span>
+              </div>
+              <div class="watch-data-item">
+                <span class="watch-data-icon">😴</span>
+                <span class="watch-data-value" id="watch-sleep">7.5</span>
+                <span class="watch-data-label">Horas Sono</span>
+              </div>
+              <div class="watch-data-item">
+                <span class="watch-data-icon">🫁</span>
+                <span class="watch-data-value" id="watch-vo2">42</span>
+                <span class="watch-data-label">VO2 Max</span>
+              </div>
+            </div>
+            <button class="secondary-btn" onclick="syncWatchData()">Sincronizar Dados</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Page: Agenda -->
+      <div id="page-calendar" class="page">
+        <div class="page-title">
+          <h2>Agenda</h2>
+        </div>
+        <div class="card calendar-card">
+          <div class="calendar-header">
+            <button onclick="changeMonth(-1)">&lt;</button>
+            <span id="calendar-month">Abril 2026</span>
+            <button onclick="changeMonth(1)">&gt;</button>
+          </div>
+          <div class="calendar-weekdays">
+            <span>Dom</span><span>Seg</span><span>Ter</span><span>Qua</span><span>Qui</span><span>Sex</span><span>Sab</span>
+          </div>
+          <div id="calendar-days" class="calendar-days"></div>
+          <div id="day-details" class="day-details"></div>
+        </div>
+        <div class="card">
+          <h3>Treinos Agendados</h3>
+          <div id="workouts-list" class="workouts-list"></div>
+        </div>
+      </div>
+
+      <!-- Page: Nutricao -->
+      <div id="page-nutrition" class="page">
+        <div class="page-title">
+          <h2>Nutricao</h2>
+        </div>
+        <div class="card nutrition-card">
+          <h3>Pre-Treino</h3>
+          <div id="pre-workout-tips" class="nutrition-tips"></div>
+        </div>
+        <div class="card nutrition-card">
+          <h3>Pos-Treino</h3>
+          <div id="post-workout-tips" class="nutrition-tips"></div>
+        </div>
+      </div>
+
+      <!-- Page: Chat -->
+      <div id="page-chat" class="page">
+        <div class="page-title">
+          <h2>IA Coach</h2>
+        </div>
+        <div class="card chat-card">
+          <div id="chat-messages" class="chat-messages"></div>
+          <div class="chat-input">
+            <input type="text" id="chat-input" placeholder="Pergunta-me sobre treino, dieta, etc..." onkeypress="if(event.key==='Enter')sendMessage()">
+            <button onclick="sendMessage()">Enviar</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Page: Conta -->
+      <div id="page-account" class="page">
+        <div class="page-title">
+          <h2>Minha Conta</h2>
+        </div>
+
+        <!-- Perfil -->
+        <div class="card account-card">
+          <div class="account-header">
+            <div class="account-avatar" id="account-avatar">TU</div>
+            <div class="account-info">
+              <h3 id="account-name">Utilizador</h3>
+              <p id="account-email">email@exemplo.com</p>
+            </div>
+          </div>
+          <div class="account-details">
+            <div class="account-detail-item">
+              <span class="detail-label">Idade</span>
+              <span class="detail-value" id="account-age">-</span>
+            </div>
+            <div class="account-detail-item">
+              <span class="detail-label">Peso</span>
+              <span class="detail-value" id="account-weight">-</span>
+            </div>
+            <div class="account-detail-item">
+              <span class="detail-label">Altura</span>
+              <span class="detail-value" id="account-height">-</span>
+            </div>
+            <div class="account-detail-item">
+              <span class="detail-label">Objetivo</span>
+              <span class="detail-value" id="account-goal">-</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Estatísticas -->
+        <div class="card stats-card">
+          <h3>Estatísticas</h3>
+          <div class="account-stats-grid">
+            <div class="account-stat">
+              <span class="account-stat-value" id="stat-total-workouts">0</span>
+              <span class="account-stat-label">Treinos</span>
+            </div>
+            <div class="account-stat">
+              <span class="account-stat-value" id="stat-completed">0</span>
+              <span class="account-stat-label">Concluídos</span>
+            </div>
+            <div class="account-stat">
+              <span class="account-stat-value" id="stat-streak">0</span>
+              <span class="account-stat-label">Sequência</span>
+            </div>
+            <div class="account-stat">
+              <span class="account-stat-value" id="stat-weekly">0</span>
+              <span class="account-stat-label">Esta semana</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Histórico de Treinos -->
+        <div class="card history-card">
+          <h3>Histórico de Treinos</h3>
+          <div id="workout-history" class="workout-history-list"></div>
+        </div>
+
+        <!-- Progresso de Peso -->
+        <div class="card weight-card">
+          <h3>Progresso de Peso</h3>
+          <div id="weight-progress" class="weight-progress-content">
+            <p class="no-data-msg">Regista o teu peso para ver o progresso</p>
+          </div>
+        </div>
+
+        <button class="logout-btn" onclick="logout()">Terminar Sessão</button>
+      </div>
+
+      <!-- Bottom Navigation -->
+      <nav class="bottom-nav">
+        <button class="nav-btn active" onclick="showPage('home')">
+          <span class="nav-icon">🏠</span>
+          <span class="nav-label">Home</span>
+        </button>
+        <button class="nav-btn" onclick="showPage('calendar')">
+          <span class="nav-icon">📅</span>
+          <span class="nav-label">Agenda</span>
+        </button>
+        <button class="nav-btn" onclick="showPage('nutrition')">
+          <span class="nav-icon">🥗</span>
+          <span class="nav-label">Nutricao</span>
+        </button>
+        <button class="nav-btn" onclick="showPage('chat')">
+          <span class="nav-icon">🤖</span>
+          <span class="nav-label">Chat</span>
+        </button>
+        <button class="nav-btn" onclick="showPage('account')">
+          <span class="nav-icon">👤</span>
+          <span class="nav-label">Conta</span>
+        </button>
+      </nav>
+    </div>
+
+    <!-- Modal: Selecionar Treino -->
+    <div id="workout-modal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>Agendar Treino</h3>
+          <button class="modal-close" onclick="closeWorkoutModal()">&times;</button>
+        </div>
+        <p class="modal-date" id="modal-date"></p>
+        <div id="workout-types" class="workout-types"></div>
+        <div class="modal-footer">
+          <button class="primary-btn" id="confirm-workout-btn" onclick="confirmWorkout()" disabled>Agendar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

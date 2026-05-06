@@ -1,0 +1,39 @@
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.env
+
+# Flutter
+.dart_tool/
+.packages
+build/
+.flutter-plugins
+.flutter-plugins-dependencies
+.pub-cache/
+.pub/
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# SQLite
+*.db
+*.db-journal
+
+# Logs
+logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Capacitor / Android
+web/android/
+web/www/
+web/node_modules/
+web/package.json
+web/package-lock.json
+web/capacitor.config.json
