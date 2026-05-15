@@ -1,0 +1,62 @@
+# Dependencies
+node_modules/
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Build outputs
+dist/
+build/
+www/
+android/
+ios/
+*.jar
+
+# Environment variables
+.env
+.env.local
+.env.production
+.env.development
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Capacitor
+android/app/build/
+android/gradlew
+android/gradlew.bat
+android/local.properties
+android/gradle/
+android/gradle.properties
+android/settings.gradle
+android/build.gradle
+android/variables.gradle
+android/capacitor-cordova-android-plugins/
+
+# Testing
+coverage/
+.nyc_output/
+
+# Misc
+.cache/
+.temp/
+tmp/
+tmp*/
+*.orig
+*.bak

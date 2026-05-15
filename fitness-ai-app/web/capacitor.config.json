@@ -1,0 +1,8 @@
+{
+  "appId": "com.kinvera.app",
+  "appName": "Kinvera",
+  "webDir": "www",
+  "android": {
+    "allowMixedContent": true
+  }
+}
