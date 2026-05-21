@@ -898,3 +898,53 @@ header button:hover { background: var(--bg); }
 @media (max-width: 480px) {
   .account-stats-grid { grid-template-columns: repeat(2, 1fr); }
 }
+
+/* Nutrition Page Styles */
+.nutrition-scroll-row {
+  display: flex;
+  overflow-x: auto;
+  gap: 12px;
+  padding-bottom: 12px;
+  margin-bottom: 8px;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.nutrition-scroll-row::-webkit-scrollbar {
+  display: none;
+}
+.nutrition-card {
+  min-width: 120px;
+  height: 140px;
+  border-radius: 20px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  flex-shrink: 0;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+  color: #1a1a1a;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s ease;
+}
+.nutrition-card:active {
+  transform: scale(0.96);
+}
+.nutrition-card-icon {
+  font-size: 36px;
+  margin-bottom: 8px;
+  filter: drop-shadow(0 4px 6px rgba(0,0,0,0.15));
+}
+.nutrition-card-val {
+  font-weight: 800;
+  font-size: 16px;
+  margin-bottom: 2px;
+  letter-spacing: -0.5px;
+}
+.nutrition-card-sub {
+  font-size: 12px;
+  font-weight: 600;
+  opacity: 0.75;
+}

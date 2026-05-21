@@ -276,6 +276,86 @@
         <button class="logout-btn" onclick="logout()">Terminar Sessão</button>
       </div>
 
+      <!-- Page: Nutrition -->
+      <div id="page-nutrition" class="page" style="padding-bottom: 80px;">
+        <div style="padding: 20px 20px 10px;">
+          <h2 style="font-size: 28px; font-weight: 700; color: var(--text); margin-bottom: 24px;">Fitness nutrition</h2>
+          
+          <!-- Section 1 -->
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+            <h3 style="font-size: 18px; font-weight: 600; color: var(--text);">Food tracking</h3>
+            <div style="display: flex; gap: 8px;">
+              <span style="font-size: 11px; background: rgba(255,255,255,0.1); padding: 4px 8px; border-radius: 12px; color: var(--text-muted);">Now meal</span>
+              <span style="font-size: 11px; background: rgba(255,255,255,0.1); padding: 4px 8px; border-radius: 12px; color: var(--text-muted);">Suggest</span>
+            </div>
+          </div>
+          <div class="nutrition-scroll-row">
+            <div class="nutrition-card" style="background-color: #ffd8b1;">
+              <div class="nutrition-card-icon">🥗</div>
+              <div class="nutrition-card-val">2day</div>
+              <div class="nutrition-card-sub">Daily diet</div>
+            </div>
+            <div class="nutrition-card" style="background-color: #ffb480;">
+              <div class="nutrition-card-icon">🥩</div>
+              <div class="nutrition-card-val">21g</div>
+              <div class="nutrition-card-sub">Proteins</div>
+            </div>
+            <div class="nutrition-card" style="background-color: #ffb8b8;">
+              <div class="nutrition-card-icon">🥞</div>
+              <div class="nutrition-card-val">760m</div>
+              <div class="nutrition-card-sub">Carbos</div>
+            </div>
+          </div>
+
+          <!-- Section 2 -->
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 24px; margin-bottom: 12px;">
+            <h3 style="font-size: 18px; font-weight: 600; color: var(--text);">Food rules</h3>
+            <span style="font-size: 12px; color: var(--text-muted);">Log</span>
+          </div>
+          <div class="nutrition-scroll-row">
+            <div class="nutrition-card" style="background-color: #ffb480;">
+              <div class="nutrition-card-icon">🥣</div>
+              <div class="nutrition-card-val">45.00m</div>
+              <div class="nutrition-card-sub">Oatmeal</div>
+            </div>
+            <div class="nutrition-card" style="background-color: #d1b3ff;">
+              <div class="nutrition-card-icon">🍇</div>
+              <div class="nutrition-card-val">380.000</div>
+              <div class="nutrition-card-sub">Smoothie</div>
+            </div>
+            <div class="nutrition-card" style="background-color: #ffb8b8;">
+              <div class="nutrition-card-icon">🥗</div>
+              <div class="nutrition-card-val">44.1550</div>
+              <div class="nutrition-card-sub">Salad</div>
+            </div>
+          </div>
+
+          <!-- Section 3 -->
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 24px; margin-bottom: 12px;">
+            <h3 style="font-size: 18px; font-weight: 600; color: var(--text);">Meals</h3>
+            <span style="font-size: 12px; color: var(--text-muted);">Log</span>
+          </div>
+          <div class="nutrition-scroll-row">
+            <div class="nutrition-card" style="background-color: #cce6ff;">
+              <div class="nutrition-card-icon">🍲</div>
+              <div class="nutrition-card-val">21.8.90</div>
+              <div class="nutrition-card-sub">Soup</div>
+            </div>
+            <div class="nutrition-card" style="background-color: #d5eed1;">
+              <div class="nutrition-card-icon">🍎</div>
+              <div class="nutrition-card-val">350cal</div>
+              <div class="nutrition-card-sub">Snack</div>
+            </div>
+            <div class="nutrition-card" style="background-color: #ffb8b8;">
+              <div class="nutrition-card-icon">🥪</div>
+              <div class="nutrition-card-val">Lunch</div>
+              <div class="nutrition-card-sub">Sandwich</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
       <!-- Bottom Navigation -->
       <nav class="bottom-nav">
         <button class="nav-btn active" onclick="showPage('home')">
@@ -306,6 +386,12 @@
             <circle cx="12" cy="7" r="4"></circle>
           </svg>
           <span class="nav-label">Conta</span>
+        </button>
+        <button class="nav-btn" onclick="showPage('nutrition')">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+          </svg>
+          <span class="nav-label">Nutrição</span>
         </button>
       </nav>
     </div>
