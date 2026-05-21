@@ -2,7 +2,8 @@
   "appId": "com.kinvera.app",
   "appName": "Kinvera",
   "webDir": "www",
-  "android": {
-    "allowMixedContent": true
+  "server": {
+    "androidScheme": "http",
+    "cleartext": true
   }
 }

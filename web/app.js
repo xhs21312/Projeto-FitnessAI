@@ -482,19 +482,32 @@ function showDayDetails(dateStr, workouts) {
   const date = new Date(dateStr + 'T00:00:00');
   const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
   
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const selectedDate = new Date(dateStr + 'T00:00:00');
+  selectedDate.setHours(0, 0, 0, 0);
+  const isPast = selectedDate < today;
+
+  let btnHtml = '';
+  if (!isPast) {
+    btnHtml = `<button class="schedule-btn" onclick="scheduleWorkout('${dateStr}')">+ Agendar Treino</button>`;
+  } else {
+    btnHtml = `<p class="past-date-msg" style="color:var(--text-muted);font-size:13px;text-align:center;margin-top:12px;font-style:italic;">Não é possível agendar treinos para datas passadas</p>`;
+  }
+
   if (workouts && workouts.length > 0) {
     details.innerHTML = `
       <h4>${date.toLocaleDateString('pt-PT', options)}</h4>
       ${workouts.map(w => `
         <p>${w.completed ? '&#10003;' : '&#9203;'} ${w.name} (${w.duration}min) ${w.completed ? '' : `<button class="btn-complete-sm" onclick="completeWorkout('${w.uuid}')">Concluir</button>`}</p>
       `).join('')}
-      <button class="schedule-btn" onclick="scheduleWorkout('${dateStr}')">+ Agendar Treino</button>
+      ${btnHtml}
     `;
   } else {
     details.innerHTML = `
       <h4>${date.toLocaleDateString('pt-PT', options)}</h4>
       <p class="empty-state">Sem treinos agendados para este dia</p>
-      <button class="schedule-btn" onclick="scheduleWorkout('${dateStr}')">+ Agendar Treino</button>
+      ${btnHtml}
     `;
   }
 }
@@ -516,6 +529,16 @@ const workoutTypes = [
 ];
 
 async function scheduleWorkout(dateStr) {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const selectedDate = new Date(dateStr + 'T00:00:00');
+  selectedDate.setHours(0, 0, 0, 0);
+
+  if (selectedDate < today) {
+    alert('Não é possível agendar treinos para datas passadas.');
+    return;
+  }
+
   scheduleDateStr = dateStr;
   selectedWorkoutType = null;
   
