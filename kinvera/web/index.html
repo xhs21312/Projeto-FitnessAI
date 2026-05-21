@@ -318,6 +318,10 @@
           <button class="modal-close" onclick="closeWorkoutModal()">&times;</button>
         </div>
         <p class="modal-date" id="modal-date"></p>
+        <div style="margin: 10px 0; display: flex; align-items: center; justify-content: space-between; padding: 12px; background: rgba(255,255,255,0.05); border-radius: 8px;">
+          <label for="workout-time" style="font-weight: 500; font-size: 14px;">Hora do Treino (Opcional):</label>
+          <input type="time" id="workout-time" style="padding: 8px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg); color: var(--text);">
+        </div>
         <div id="workout-types" class="workout-types"></div>
         <div class="modal-footer">
           <button class="primary-btn" id="confirm-workout-btn" onclick="confirmWorkout()" disabled>Agendar</button>

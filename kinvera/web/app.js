@@ -310,7 +310,7 @@ async function loadDashboard() {
   
   if (todayWorkout) {
     workoutNameEl.textContent = todayWorkout.name;
-    workoutInfoEl.innerHTML = `${todayWorkout.type} | ${todayWorkout.duration}min | ${todayWorkout.intensity} <br><br> ${renderExercisesHtml(todayWorkout.exercises)}`;
+    workoutInfoEl.innerHTML = `${todayWorkout.type} | ${todayWorkout.duration}min | ${todayWorkout.intensity} ${todayWorkout.notes ? `| <span style="color:var(--primary)">🕒 ${todayWorkout.notes}</span>` : ''} <br><br> ${renderExercisesHtml(todayWorkout.exercises)}`;
     
     if (todayWorkout.completed) {
       workoutActionsEl.innerHTML = `
@@ -351,6 +351,7 @@ async function loadDashboard() {
             <span>${w.type || 'Treino'}</span>
             <span>${w.duration}min</span>
             <span>${w.intensity}</span>
+            ${w.notes ? `<span style="color:var(--primary); font-weight:600;">🕒 ${w.notes}</span>` : ''}
           </p>
           ${renderExercisesHtml(w.exercises)}
         </div>
@@ -727,7 +728,7 @@ function showDayDetails(dateStr, workouts) {
       <h4>${date.toLocaleDateString('pt-PT', options)}</h4>
       ${workouts.map(w => `
         <div style="margin-bottom: 12px;">
-          <p style="margin: 0 0 4px 0;">${w.completed ? '&#10003;' : '&#9203;'} <strong>${w.name}</strong> (${w.duration}min) ${w.completed ? '' : `<button class="btn-complete-sm" onclick="completeWorkout('${w.uuid}')">Concluir</button>`}</p>
+          <p style="margin: 0 0 4px 0;">${w.completed ? '&#10003;' : '&#9203;'} <strong>${w.name}</strong> (${w.duration}min) ${w.notes ? `<span style="color:var(--primary); margin-left:8px; font-size:12px;">🕒 ${w.notes}</span>` : ''} ${w.completed ? '' : `<button class="btn-complete-sm" onclick="completeWorkout('${w.uuid}')">Concluir</button>`}</p>
           ${renderExercisesHtml(w.exercises)}
         </div>
       `).join('')}
@@ -789,6 +790,7 @@ async function scheduleWorkout(dateStr) {
   const date = new Date(dateStr + 'T00:00:00');
   const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
   document.getElementById('modal-date').textContent = date.toLocaleDateString('pt-PT', options);
+  document.getElementById('workout-time').value = '';
   
   const container = document.getElementById('workout-types');
   container.innerHTML = '';
@@ -830,10 +832,11 @@ async function confirmWorkout() {
   const wt = workoutTypes.find(w => w.id === selectedWorkoutType);
   if (!wt) return;
   
+  const timeVal = document.getElementById('workout-time').value;
   try {
     await api('/workouts', {
       method: 'POST',
-      body: { name: wt.name, type: wt.type, duration: wt.duration, intensity: wt.intensity, exercises: JSON.stringify(wt.exercises || []), scheduled_date: scheduleDateStr }
+      body: { name: wt.name, type: wt.type, duration: wt.duration, intensity: wt.intensity, exercises: JSON.stringify(wt.exercises || []), scheduled_date: scheduleDateStr, notes: timeVal }
     });
     closeWorkoutModal();
     await loadDashboard();
