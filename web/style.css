@@ -33,10 +33,20 @@ body {
 .screen { display: none; }
 .screen.active { display: block; }
 
+#login-screen.active {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+}
+
 /* Login */
 .login-box {
+  width: 100%;
   max-width: 360px;
-  margin: 10vh auto;
+  margin: 0 auto;
   padding: 40px;
   text-align: center;
   position: relative;
