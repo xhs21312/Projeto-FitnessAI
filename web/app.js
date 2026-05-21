@@ -223,7 +223,7 @@ async function loadDashboard() {
   
   if (todayWorkout) {
     workoutNameEl.textContent = todayWorkout.name;
-    workoutInfoEl.textContent = `${todayWorkout.type} | ${todayWorkout.duration}min | ${todayWorkout.intensity}`;
+    workoutInfoEl.innerHTML = `${todayWorkout.type} | ${todayWorkout.duration}min | ${todayWorkout.intensity} <br><br> ${renderExercisesHtml(todayWorkout.exercises)}`;
     
     if (todayWorkout.completed) {
       workoutActionsEl.innerHTML = `
@@ -499,7 +499,10 @@ function showDayDetails(dateStr, workouts) {
     details.innerHTML = `
       <h4>${date.toLocaleDateString('pt-PT', options)}</h4>
       ${workouts.map(w => `
-        <p>${w.completed ? '&#10003;' : '&#9203;'} ${w.name} (${w.duration}min) ${w.completed ? '' : `<button class="btn-complete-sm" onclick="completeWorkout('${w.uuid}')">Concluir</button>`}</p>
+        <div style="margin-bottom: 12px;">
+          <p style="margin: 0 0 4px 0;">${w.completed ? '&#10003;' : '&#9203;'} <strong>${w.name}</strong> (${w.duration}min) ${w.completed ? '' : `<button class="btn-complete-sm" onclick="completeWorkout('${w.uuid}')">Concluir</button>`}</p>
+          ${renderExercisesHtml(w.exercises)}
+        </div>
       `).join('')}
       ${btnHtml}
     `;
@@ -516,17 +519,31 @@ let selectedWorkoutType = null;
 let scheduleDateStr = null;
 
 const workoutTypes = [
-  { id: 'strength-full', name: 'Forca Total', type: 'strength', duration: 60, intensity: 'high', icon: '🏋️', desc: 'Squat, Deadlift, Bench Press' },
-  { id: 'strength-upper', name: 'Forca Superior', type: 'strength', duration: 50, intensity: 'high', icon: '💪', desc: 'Peito, Ombros, Triceps' },
-  { id: 'strength-lower', name: 'Forca Inferior', type: 'strength', duration: 50, intensity: 'high', icon: '🦵', desc: 'Pernas, Gluteos, Panturrilhas' },
-  { id: 'strength-back', name: 'Costas e Biceps', type: 'strength', duration: 50, intensity: 'medium', icon: '🔙', desc: 'Pull-ups, Remada, Curls' },
-  { id: 'cardio-hiit', name: 'HIIT', type: 'cardio', duration: 30, intensity: 'high', icon: '🔥', desc: 'Intervalos de alta intensidade' },
-  { id: 'cardio-steady', name: 'Cardio Moderado', type: 'cardio', duration: 45, intensity: 'medium', icon: '🏃', desc: 'Corrida ou bicicleta steady state' },
-  { id: 'flexibility', name: 'Flexibilidade', type: 'flexibility', duration: 30, intensity: 'low', icon: '🧘', desc: 'Alongamentos e mobilidade' },
-  { id: 'core', name: 'Core e Abdominais', type: 'strength', duration: 25, intensity: 'medium', icon: '🎯', desc: 'Prancha, Leg Raises, Twists' },
-  { id: 'full-body', name: 'Full Body', type: 'strength', duration: 55, intensity: 'medium', icon: '⚡', desc: 'Treino completo do corpo' },
-  { id: 'recovery', name: 'Recuperacao Ativa', type: 'recovery', duration: 30, intensity: 'low', icon: '🧊', desc: 'Mobilidade leve e descanso ativo' },
+  { id: 'strength-full', name: 'Forca Total', type: 'strength', duration: 60, intensity: 'high', icon: '🏋️', desc: 'Squat, Deadlift, Bench Press', exercises: [{name: 'Squat', sets: 4, reps: '8-10'}, {name: 'Deadlift', sets: 3, reps: '5'}, {name: 'Bench Press', sets: 4, reps: '8-10'}, {name: 'Pull-ups', sets: 3, reps: 'Max'}] },
+  { id: 'strength-upper', name: 'Forca Superior', type: 'strength', duration: 50, intensity: 'high', icon: '💪', desc: 'Peito, Ombros, Triceps', exercises: [{name: 'Bench Press', sets: 4, reps: '8-12'}, {name: 'Overhead Press', sets: 3, reps: '10'}, {name: 'Tricep Extensions', sets: 3, reps: '15'}] },
+  { id: 'strength-lower', name: 'Forca Inferior', type: 'strength', duration: 50, intensity: 'high', icon: '🦵', desc: 'Pernas, Gluteos, Panturrilhas', exercises: [{name: 'Squat', sets: 4, reps: '8-10'}, {name: 'Leg Press', sets: 3, reps: '12'}, {name: 'Calf Raises', sets: 4, reps: '15-20'}] },
+  { id: 'strength-back', name: 'Costas e Biceps', type: 'strength', duration: 50, intensity: 'medium', icon: '🔙', desc: 'Pull-ups, Remada, Curls', exercises: [{name: 'Pull-ups', sets: 4, reps: '8-10'}, {name: 'Barbell Row', sets: 3, reps: '10'}, {name: 'Bicep Curls', sets: 3, reps: '12-15'}] },
+  { id: 'cardio-hiit', name: 'HIIT', type: 'cardio', duration: 30, intensity: 'high', icon: '🔥', desc: 'Intervalos de alta intensidade', exercises: [{name: 'Jumping Jacks', duration: '45s'}, {name: 'Burpees', duration: '45s'}, {name: 'Mountain Climbers', duration: '45s'}, {name: 'Rest', duration: '15s'}] },
+  { id: 'cardio-steady', name: 'Cardio Moderado', type: 'cardio', duration: 45, intensity: 'medium', icon: '🏃', desc: 'Corrida ou bicicleta steady state', exercises: [{name: 'Jogging / Cycling', duration: '45 min'}] },
+  { id: 'flexibility', name: 'Flexibilidade', type: 'flexibility', duration: 30, intensity: 'low', icon: '🧘', desc: 'Alongamentos e mobilidade', exercises: [{name: 'Childs Pose', duration: '60s'}, {name: 'Cat-Cow', duration: '60s'}, {name: 'Downward Dog', duration: '60s'}] },
+  { id: 'core', name: 'Core e Abdominais', type: 'strength', duration: 25, intensity: 'medium', icon: '🎯', desc: 'Prancha, Leg Raises, Twists', exercises: [{name: 'Plank', duration: '60s'}, {name: 'Leg Raises', sets: 3, reps: '15'}, {name: 'Russian Twists', sets: 3, reps: '20'}] },
+  { id: 'full-body', name: 'Full Body', type: 'strength', duration: 55, intensity: 'medium', icon: '⚡', desc: 'Treino completo do corpo', exercises: [{name: 'Push-ups', sets: 3, reps: '15'}, {name: 'Goblet Squats', sets: 3, reps: '15'}, {name: 'Dumbbell Rows', sets: 3, reps: '12'}, {name: 'Plank', duration: '60s'}] },
+  { id: 'recovery', name: 'Recuperacao Ativa', type: 'recovery', duration: 30, intensity: 'low', icon: '🧊', desc: 'Mobilidade leve e descanso ativo', exercises: [{name: 'Light Walking', duration: '15 min'}, {name: 'Foam Rolling', duration: '15 min'}] },
 ];
+
+function renderExercisesHtml(exercises) {
+  if (!exercises) return '';
+  let exList = [];
+  try {
+    exList = typeof exercises === 'string' ? JSON.parse(exercises) : exercises;
+  } catch(e) { return ''; }
+  
+  if (!Array.isArray(exList) || exList.length === 0) return '';
+  return `<div class="workout-exercises-list" style="margin-top: 8px; font-size: 13px; color: var(--text-muted); background: rgba(0,0,0,0.1); padding: 8px; border-radius: 6px;">
+    <strong style="display:block;margin-bottom:4px;color:var(--text)">Exercícios:</strong>
+    ${exList.map(e => `• ${e.name} ${e.sets ? `(${e.sets}x${e.reps})` : (e.duration ? `(${e.duration})` : '')}`).join('<br>')}
+  </div>`;
+}
 
 async function scheduleWorkout(dateStr) {
   const today = new Date();
@@ -589,7 +606,7 @@ async function confirmWorkout() {
   try {
     await api('/workouts', {
       method: 'POST',
-      body: { name: wt.name, type: wt.type, duration: wt.duration, intensity: wt.intensity, scheduled_date: scheduleDateStr }
+      body: { name: wt.name, type: wt.type, duration: wt.duration, intensity: wt.intensity, exercises: JSON.stringify(wt.exercises || []), scheduled_date: scheduleDateStr }
     });
     closeWorkoutModal();
     await loadDashboard();
