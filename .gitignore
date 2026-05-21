@@ -7,7 +7,6 @@ pnpm-lock.yaml
 # Build outputs
 dist/
 build/
-www/
 android/
 ios/
 *.jar
@@ -52,11 +51,9 @@ android/build.gradle
 android/variables.gradle
 android/capacitor-cordova-android-plugins/
 web/android/
-web/www/
 web/node_modules/
 web/package.json
 web/package-lock.json
-web/capacitor.config.json
 
 # Flutter
 .dart_tool/

@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kinvera</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="app">
+    <!-- Login -->
+    <div id="login-screen" class="screen active">
+      <div class="login-box">
+        <div class="logo">Kinvera</div>
+        <h2>Treinador Pessoal Inteligente</h2>
+
+        <!-- Login Form -->
+        <div id="login-form">
+          <input type="text" id="email" placeholder="Email ou Nome" value="test@kinvera.com">
+          <input type="password" id="password" placeholder="Password" value="password123">
+          <button onclick="login()">Entrar</button>
+          <p class="forgot-password-link"><a href="#" onclick="showForgotPassword()">Esqueci-me da password</a></p>
+          <p class="switch-form">Não tens conta? <a href="#" onclick="showRegister()">Criar conta</a></p>
+        </div>
+
+        <!-- Forgot Password Form -->
+        <div id="forgot-password-form" style="display:none;">
+          <input type="email" id="forgot-email" placeholder="Email de recuperação">
+          <button onclick="forgotPassword()">Recuperar Password</button>
+          <p id="forgot-msg" style="display:none;color:var(--accent-green);font-size:13px;margin-top:8px;"></p>
+          <p class="switch-form"><a href="#" onclick="showLogin()">Voltar ao login</a></p>
+        </div>
+
+        <!-- Reset Password Form -->
+        <div id="reset-password-form" style="display:none;">
+          <p style="color:var(--text-muted);font-size:14px;margin-bottom:16px;">Insere a tua nova password</p>
+          <input type="password" id="reset-password" placeholder="Nova Password">
+          <input type="password" id="reset-password-confirm" placeholder="Confirmar Password">
+          <button onclick="resetPassword()">Redefinir Password</button>
+          <p class="switch-form"><a href="#" onclick="showLogin()">Voltar ao login</a></p>
+        </div>
+
+        <!-- Register Form -->
+        <div id="register-form" style="display:none;">
+          <input type="text" id="reg-name" placeholder="Nome *">
+          <input type="email" id="reg-email" placeholder="Email *">
+          <input type="password" id="reg-password" placeholder="Password *">
+          <input type="number" id="reg-age" placeholder="Idade">
+          <input type="number" id="reg-weight" placeholder="Peso (kg)">
+          <input type="number" id="reg-height" placeholder="Altura (cm)">
+          <select id="reg-goal">
+            <option value="general">Geral</option>
+            <option value="strength">Força</option>
+            <option value="muscle">Massa Muscular</option>
+            <option value="weight_loss">Perda de Peso</option>
+            <option value="endurance">Resistência</option>
+          </select>
+          <button onclick="register()">Criar Conta</button>
+          <p class="switch-form">Já tens conta? <a href="#" onclick="showLogin()">Entrar</a></p>
+        </div>
+
+        <div id="login-error" class="error"></div>
+      </div>
+    </div>
+
+    <!-- Main app with tabs -->
+    <div id="dashboard-screen" class="screen">
+      <header>
+        <h1>Kinvera</h1>
+        <button onclick="logout()">Sair</button>
+      </header>
+
+      <!-- Page: Home -->
+      <div id="page-home" class="page active">
+        <div class="user-greeting">
+          <h2 id="user-name">Ola!</h2>
+          <p>Pronto para treinar hoje?</p>
+        </div>
+        <div class="card suggestion-card" id="today-workout-card">
+          <div class="card-header">
+            <span class="icon">📅</span>
+            <div>
+              <h3>Treino de Hoje</h3>
+              <p id="today-workout-name">A carregar...</p>
+            </div>
+          </div>
+          <p id="today-workout-info"></p>
+          <div id="today-workout-actions" class="today-workout-actions"></div>
+        </div>
+        <div class="card watch-connect-card">
+          <h3>Smartwatch</h3>
+          <div id="watch-status" class="watch-status">
+            <div class="watch-icon-container">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--secondary)">
+                <rect x="6" y="3" width="12" height="18" rx="3"></rect>
+                <path d="M12 3v-1"></path>
+                <path d="M12 22v-1"></path>
+                <path d="M9 3h6"></path>
+                <path d="M9 22h6"></path>
+              </svg>
+            </div>
+            <p class="watch-status-text" id="watch-status-text">Nenhum dispositivo conectado</p>
+            <button class="primary-btn" id="watch-connect-btn" onclick="scanBluetooth()">Procurar Dispositivos</button>
+          </div>
+          <div id="bt-scanning" style="display:none;" class="bt-scanning">
+            <div class="bt-spinner"></div>
+            <p>A procurar dispositivos Bluetooth...</p>
+            <div id="bt-devices-list" class="bt-devices-list"></div>
+            <button class="secondary-btn" onclick="stopScan()">Parar Procura</button>
+          </div>
+          <div id="watch-connected" class="watch-connected" style="display:none;">
+            <div class="watch-header">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--accent-green)">
+                <rect x="6" y="3" width="12" height="18" rx="3"></rect>
+                <path d="M12 3v-1"></path>
+                <path d="M12 22v-1"></path>
+              </svg>
+              <div>
+                <p class="watch-name" id="watch-device-name">Smartwatch</p>
+                <p class="watch-sync" id="watch-device-id">Conectado via Bluetooth</p>
+              </div>
+              <button class="btn-disconnect" onclick="disconnectWatch()">Desconectar</button>
+            </div>
+            <div class="watch-data-grid">
+              <div class="watch-data-item">
+                <span class="watch-data-icon">❤️</span>
+                <span class="watch-data-value" id="watch-hr">--</span>
+                <span class="watch-data-label">BPM</span>
+              </div>
+              <div class="watch-data-item">
+                <span class="watch-data-icon">🔥</span>
+                <span class="watch-data-value" id="watch-cal">--</span>
+                <span class="watch-data-label">Kcal</span>
+              </div>
+              <div class="watch-data-item">
+                <span class="watch-data-icon">👟</span>
+                <span class="watch-data-value" id="watch-steps">--</span>
+                <span class="watch-data-label">Passos</span>
+              </div>
+              <div class="watch-data-item">
+                <span class="watch-data-icon">🏃</span>
+                <span class="watch-data-value" id="watch-active">--</span>
+                <span class="watch-data-label">Min Ativos</span>
+              </div>
+              <div class="watch-data-item">
+                <span class="watch-data-icon">😴</span>
+                <span class="watch-data-value" id="watch-sleep">--</span>
+                <span class="watch-data-label">Horas Sono</span>
+              </div>
+              <div class="watch-data-item">
+                <span class="watch-data-icon">🫁</span>
+                <span class="watch-data-value" id="watch-vo2">--</span>
+                <span class="watch-data-label">VO2 Max</span>
+              </div>
+            </div>
+            <button class="secondary-btn" onclick="syncWatchData()">Sincronizar Dados</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Page: Agenda -->
+      <div id="page-calendar" class="page">
+        <div class="page-title">
+          <h2>Agenda</h2>
+        </div>
+        <div class="card calendar-card">
+          <div class="calendar-header">
+            <button onclick="changeMonth(-1)">&lt;</button>
+            <span id="calendar-month">Abril 2026</span>
+            <button onclick="changeMonth(1)">&gt;</button>
+          </div>
+          <div class="calendar-weekdays">
+            <span>Dom</span><span>Seg</span><span>Ter</span><span>Qua</span><span>Qui</span><span>Sex</span><span>Sab</span>
+          </div>
+          <div id="calendar-days" class="calendar-days"></div>
+          <div id="day-details" class="day-details"></div>
+        </div>
+        <div class="card">
+          <h3>Treinos Agendados</h3>
+          <div id="workouts-list" class="workouts-list"></div>
+        </div>
+      </div>
+
+      <!-- Page: Chat -->
+      <div id="page-chat" class="page">
+        <div class="page-title">
+          <h2>Chatbot</h2>
+        </div>
+        <div class="card chat-card">
+          <div id="chat-messages" class="chat-messages"></div>
+          <div class="chat-input">
+            <input type="text" id="chat-input" placeholder="Como posso ajudar-te?" onkeypress="if(event.key==='Enter')sendMessage()">
+            <button onclick="sendMessage()">Enviar</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Page: Conta -->
+      <div id="page-account" class="page">
+        <div class="page-title">
+          <h2>Minha Conta</h2>
+        </div>
+
+        <!-- Perfil -->
+        <div class="card account-card">
+          <div class="account-header">
+            <div class="account-avatar" id="account-avatar">TU</div>
+            <div class="account-info">
+              <h3 id="account-name">Utilizador</h3>
+              <p id="account-email">email@exemplo.com</p>
+            </div>
+            <button class="btn-edit-profile" onclick="openEditProfile()">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+              </svg>
+            </button>
+          </div>
+          <div class="account-details">
+            <div class="account-detail-item">
+              <span class="detail-label">Idade</span>
+              <span class="detail-value" id="account-age">-</span>
+            </div>
+            <div class="account-detail-item">
+              <span class="detail-label">Peso</span>
+              <span class="detail-value" id="account-weight">-</span>
+            </div>
+            <div class="account-detail-item">
+              <span class="detail-label">Altura</span>
+              <span class="detail-value" id="account-height">-</span>
+            </div>
+            <div class="account-detail-item">
+              <span class="detail-label">Objetivo</span>
+              <span class="detail-value" id="account-goal">-</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Estatísticas -->
+        <div class="card stats-card">
+          <h3>Estatísticas</h3>
+          <div class="account-stats-grid">
+            <div class="account-stat">
+              <span class="account-stat-value" id="stat-total-workouts">0</span>
+              <span class="account-stat-label">Treinos</span>
+            </div>
+            <div class="account-stat">
+              <span class="account-stat-value" id="stat-completed">0</span>
+              <span class="account-stat-label">Concluídos</span>
+            </div>
+            <div class="account-stat">
+              <span class="account-stat-value" id="stat-streak">0</span>
+              <span class="account-stat-label">Sequência</span>
+            </div>
+            <div class="account-stat">
+              <span class="account-stat-value" id="stat-weekly">0</span>
+              <span class="account-stat-label">Esta semana</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Histórico de Treinos -->
+        <div class="card history-card">
+          <h3>Histórico de Treinos</h3>
+          <div id="workout-history" class="workout-history-list"></div>
+        </div>
+
+        <!-- Progresso de Peso -->
+        <div class="card weight-card">
+          <h3>Progresso de Peso</h3>
+          <div id="weight-progress" class="weight-progress-content">
+            <p class="no-data-msg">Regista o teu peso para ver o progresso</p>
+          </div>
+        </div>
+
+        <button class="logout-btn" onclick="logout()">Terminar Sessão</button>
+      </div>
+
+      <!-- Bottom Navigation -->
+      <nav class="bottom-nav">
+        <button class="nav-btn active" onclick="showPage('home')">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+            <polyline points="9 22 9 12 15 12 15 22"></polyline>
+          </svg>
+          <span class="nav-label">Home</span>
+        </button>
+        <button class="nav-btn" onclick="showPage('calendar')">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+            <line x1="16" y1="2" x2="16" y2="6"></line>
+            <line x1="8" y1="2" x2="8" y2="6"></line>
+            <line x1="3" y1="10" x2="21" y2="10"></line>
+          </svg>
+          <span class="nav-label">Agenda</span>
+        </button>
+        <button class="nav-btn" onclick="showPage('chat')">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+          </svg>
+          <span class="nav-label">Chat</span>
+        </button>
+        <button class="nav-btn" onclick="showPage('account')">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+          <span class="nav-label">Conta</span>
+        </button>
+      </nav>
+    </div>
+
+    <!-- Modal: Selecionar Treino -->
+    <div id="workout-modal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>Agendar Treino</h3>
+          <button class="modal-close" onclick="closeWorkoutModal()">&times;</button>
+        </div>
+        <p class="modal-date" id="modal-date"></p>
+        <div id="workout-types" class="workout-types"></div>
+        <div class="modal-footer">
+          <button class="primary-btn" id="confirm-workout-btn" onclick="confirmWorkout()" disabled>Agendar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: Editar Perfil -->
+    <div id="edit-profile-modal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>Editar Perfil</h3>
+          <button class="modal-close" onclick="closeEditProfile()">&times;</button>
+        </div>
+        <div class="edit-profile-form">
+          <input type="text" id="edit-name" placeholder="Nome">
+          <input type="number" id="edit-age" placeholder="Idade">
+          <input type="number" id="edit-weight" placeholder="Peso (kg)">
+          <input type="number" id="edit-height" placeholder="Altura (cm)">
+          <select id="edit-goal">
+            <option value="general">Geral</option>
+            <option value="strength">Força</option>
+            <option value="muscle">Massa Muscular</option>
+            <option value="weight_loss">Perda de Peso</option>
+            <option value="endurance">Resistência</option>
+          </select>
+          <div class="modal-footer">
+            <button class="primary-btn" onclick="saveProfile()">Guardar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
