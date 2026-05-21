@@ -25,6 +25,9 @@ ios/
 *.swo
 *~
 .DS_Store
+*.iml
+*.ipr
+*.iws
 
 # Logs
 logs/
@@ -48,6 +51,24 @@ android/settings.gradle
 android/build.gradle
 android/variables.gradle
 android/capacitor-cordova-android-plugins/
+web/android/
+web/www/
+web/node_modules/
+web/package.json
+web/package-lock.json
+web/capacitor.config.json
+
+# Flutter
+.dart_tool/
+.packages
+.flutter-plugins
+.flutter-plugins-dependencies
+.pub-cache/
+.pub/
+
+# SQLite
+*.db
+*.db-journal
 
 # Testing
 coverage/
