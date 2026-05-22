@@ -290,17 +290,17 @@
             </div>
           </div>
           <div class="nutrition-scroll-row">
-            <div class="nutrition-card" style="background-color: #ffd8b1;">
+            <div class="nutrition-card" style="background-color: #ffd8b1;" onclick="showNutritionDetails('daily-diet')">
               <div class="nutrition-card-icon">🥗</div>
               <div class="nutrition-card-val">2day</div>
               <div class="nutrition-card-sub">Daily diet</div>
             </div>
-            <div class="nutrition-card" style="background-color: #ffb480;">
+            <div class="nutrition-card" style="background-color: #ffb480;" onclick="showNutritionDetails('proteins')">
               <div class="nutrition-card-icon">🥩</div>
               <div class="nutrition-card-val">21g</div>
               <div class="nutrition-card-sub">Proteins</div>
             </div>
-            <div class="nutrition-card" style="background-color: #ffb8b8;">
+            <div class="nutrition-card" style="background-color: #ffb8b8;" onclick="showNutritionDetails('carbos')">
               <div class="nutrition-card-icon">🥞</div>
               <div class="nutrition-card-val">760m</div>
               <div class="nutrition-card-sub">Carbos</div>
@@ -313,17 +313,17 @@
             <span style="font-size: 12px; color: var(--text-muted);">Log</span>
           </div>
           <div class="nutrition-scroll-row">
-            <div class="nutrition-card" style="background-color: #ffb480;">
+            <div class="nutrition-card" style="background-color: #ffb480;" onclick="showNutritionDetails('oatmeal')">
               <div class="nutrition-card-icon">🥣</div>
               <div class="nutrition-card-val">45.00m</div>
               <div class="nutrition-card-sub">Oatmeal</div>
             </div>
-            <div class="nutrition-card" style="background-color: #d1b3ff;">
+            <div class="nutrition-card" style="background-color: #d1b3ff;" onclick="showNutritionDetails('smoothie')">
               <div class="nutrition-card-icon">🍇</div>
               <div class="nutrition-card-val">380.000</div>
               <div class="nutrition-card-sub">Smoothie</div>
             </div>
-            <div class="nutrition-card" style="background-color: #ffb8b8;">
+            <div class="nutrition-card" style="background-color: #ffb8b8;" onclick="showNutritionDetails('salad')">
               <div class="nutrition-card-icon">🥗</div>
               <div class="nutrition-card-val">44.1550</div>
               <div class="nutrition-card-sub">Salad</div>
@@ -336,17 +336,17 @@
             <span style="font-size: 12px; color: var(--text-muted);">Log</span>
           </div>
           <div class="nutrition-scroll-row">
-            <div class="nutrition-card" style="background-color: #cce6ff;">
+            <div class="nutrition-card" style="background-color: #cce6ff;" onclick="showNutritionDetails('soup')">
               <div class="nutrition-card-icon">🍲</div>
               <div class="nutrition-card-val">21.8.90</div>
               <div class="nutrition-card-sub">Soup</div>
             </div>
-            <div class="nutrition-card" style="background-color: #d5eed1;">
+            <div class="nutrition-card" style="background-color: #d5eed1;" onclick="showNutritionDetails('snack')">
               <div class="nutrition-card-icon">🍎</div>
               <div class="nutrition-card-val">350cal</div>
               <div class="nutrition-card-sub">Snack</div>
             </div>
-            <div class="nutrition-card" style="background-color: #ffb8b8;">
+            <div class="nutrition-card" style="background-color: #ffb8b8;" onclick="showNutritionDetails('lunch')">
               <div class="nutrition-card-icon">🥪</div>
               <div class="nutrition-card-val">Lunch</div>
               <div class="nutrition-card-sub">Sandwich</div>
@@ -437,6 +437,40 @@
           <div class="modal-footer">
             <button class="primary-btn" onclick="saveProfile()">Guardar</button>
           </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: Nutrition Details -->
+    <div id="nutrition-modal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 id="nutri-modal-title">Detalhes</h3>
+          <button class="modal-close" onclick="closeNutritionModal()">&times;</button>
+        </div>
+        <div style="padding: 10px 0;">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
+            <div style="background: rgba(255,255,255,0.05); padding: 12px; border-radius: 12px; width: 48%; text-align: center;">
+              <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 4px;">Calorias</div>
+              <div id="nutri-modal-kcal" style="font-size: 18px; font-weight: 700; color: var(--accent-orange);">0</div>
+            </div>
+            <div style="background: rgba(255,255,255,0.05); padding: 12px; border-radius: 12px; width: 48%; text-align: center;">
+              <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 4px;">Proteína</div>
+              <div id="nutri-modal-protein" style="font-size: 18px; font-weight: 700; color: var(--accent-red);">0</div>
+            </div>
+          </div>
+          <div style="display: flex; justify-content: space-between; margin-bottom: 16px;">
+            <div style="background: rgba(255,255,255,0.05); padding: 12px; border-radius: 12px; width: 48%; text-align: center;">
+              <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 4px;">Hidratos</div>
+              <div id="nutri-modal-carbs" style="font-size: 18px; font-weight: 700; color: var(--secondary);">0</div>
+            </div>
+            <div style="background: rgba(255,255,255,0.05); padding: 12px; border-radius: 12px; width: 48%; text-align: center;">
+              <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 4px;">Gorduras</div>
+              <div id="nutri-modal-fat" style="font-size: 18px; font-weight: 700; color: var(--accent-green);">0</div>
+            </div>
+          </div>
+          <h4 style="font-size: 15px; margin-bottom: 8px;">Ingredientes / Notas</h4>
+          <p id="nutri-modal-ingredients" style="color: var(--text-muted); font-size: 14px; line-height: 1.5;"></p>
         </div>
       </div>
     </div>
